@@ -5,6 +5,7 @@ import TopBar from "./Top and Bottom Bars/TopBar.js";
 import BottomBar from "./Top and Bottom Bars/BottomBar";
 import MoviesList from "./MoviesList/MoviesList.js";
 import SessionList from "./SessionList/SessionList.js";
+import SeatsSelection from "./SeatsSelection/SeatsSelection.js";
 
 export default function App() {
   return (
@@ -17,6 +18,9 @@ export default function App() {
         </Route>
         <Route path = "/filme" exact>
           <SessionList />
+        </Route>
+        <Route path = "/sessao" exact>
+          <SeatsSelection />
         </Route>
       </Switch>
     </Router>
