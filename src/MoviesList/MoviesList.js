@@ -13,7 +13,7 @@ export default function MoviesList() {
     );
 }
 
-function Movie({id, title, posterURL, overview, releaseDate}) {
+function Movie() {
     return (
         <img src="temp/Holmes.png" />
     );
