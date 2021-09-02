@@ -1,20 +1,29 @@
 import "./MoviesList.css";
+import {getMoviesList} from "../../serverFunctions.js"
+import { useState, useEffect } from "react";
 
 export default function MoviesList() {
-    const list = [1,2,3,4,5,6,7,8,9,10]
-    console.log("OPA")
+    const [MoviesList,setMoviesList] = useState([]);
+
+    useEffect( () => {
+        getMoviesList()
+            .then( (resp) => setMoviesList(resp.data));
+    }
+    ,[]);
+
+    console.log("OPA");
     return (
         <section className = "movies-list">
             <p>Selecione o filme</p>
             <div>
-              {list.map( (element) => <Movie /> )}
+              {MoviesList.map( ({posterURL}, index) => <Movie key = {index} posterURL={posterURL}/> )}
             </div>
         </section>
     );
 }
 
-function Movie() {
+function Movie({posterURL}) {
     return (
-        <img src="temp/Holmes.png" />
+        <img src={posterURL} />
     );
 }
