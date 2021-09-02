@@ -1,11 +1,15 @@
 import axios from "axios"
 
-const mainUrl = "https://mock-api.bootcamp.respondeai.com.br/api/v3/cineflex/movies"
+const mainUrl = "https://mock-api.bootcamp.respondeai.com.br/api/v3/cineflex"
 
 export function getMoviesList () {
-    return axios.get(mainUrl);
+    return axios.get(`${mainUrl}/movies`);
 }
 
-export function getMovieById (id) {
-    return axios.get(`${mainUrl}/${id}/showtimes`)
+export function getMovieById (movieId) {
+    return axios.get(`${mainUrl}/movies/${movieId}/showtimes`)
+}
+
+export function getSeatsForSession(sessionId) {
+    return axios.get(`${mainUrl}/showtimes/${sessionId}/seats`)
 }

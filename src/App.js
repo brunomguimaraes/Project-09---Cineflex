@@ -10,12 +10,12 @@ import SeatsSelection from "./components/SeatsSelection/SeatsSelection.js";
 import SuccessfulPurchase from "./components/SuccessfulPurchase/SucessfulPurchase.js"
 
 export default function App() {
-  const [selectedMovie, setSelectedMovie] = useState([])
-
+  const [selectedMovie, setSelectedMovie] = useState({})
+  const [selectedSession, setSelectedSession] = useState({day:""})
   return (
     <Router>
       <TopBar />
-      <BottomBar movieName = "" movieSession = ""/>
+      <BottomBar movie={selectedMovie} session={selectedSession}/>
       <Switch>
         <Route path = "/" exact>
           <MoviesList />
@@ -24,7 +24,7 @@ export default function App() {
           <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie}/>
         </Route>
         <Route path = "/sessao/:sessionId" exact>
-          <SeatsSelection />
+          <SeatsSelection selectedSession = {selectedSession} setSelectedSession = {setSelectedSession}/>
         </Route>
         <Route path = "/sucesso" exact>
           <SuccessfulPurchase />

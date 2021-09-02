@@ -1,15 +1,15 @@
 import "./BottomBar.css";
 
-export default function BottomBar({movieName, movieSession}) {
-    if (!movieName) {
+export default function BottomBar({movie:{title, posterURL}, session:{name:movieSession, day:{weekday}}}) {
+    if (!title) {
         return ""
     };
     return (
         <footer>
-            <img src="temp/Holmes.png" />
+            <img src={posterURL} />
             <div>
-                <p>Enola Holmes</p>
-                {movieSession ? <p>{movieSession}</p> : ""}
+                <p>{title}</p>
+                {movieSession ? <p>{`${weekday} - ${movieSession}`}</p> : ""}
             </div>
         </footer>
     );

@@ -1,6 +1,18 @@
 import "./SeatsSelection.css"
+import {Link, useParams} from "react-router-dom"
+import {getSeatsForSession} from "../../serverFunctions.js"
+import { useEffect } from "react"
 
-export default function SeatsSelection() {
+export default function SeatsSelection({selectedSession, setSelectedSession}) {
+    const sessionId = useParams().sessionId
+    useEffect(() => {
+        getSeatsForSession(sessionId)
+            .then( resp => setSelectedSession(resp.data))
+        }
+    ,[]);
+
+
+    
     const examples = [
         {name: "Selecionado", state:"selected"},
         {name: "Disponível", state:"available"},
@@ -12,10 +24,10 @@ export default function SeatsSelection() {
         <section className = "seats-screen">
             <p>Selecione o(s) assento(s)</p>
             <div className="session-seats">
-                {list.map( ({name,state}) => <Seat name={name} state = {state}/> )}
+                {list.map( ({name,state}) => <Seat id={name} state = {state}/> )}
             </div>
             <div className="seats-explanation">
-                {examples.map( ({name,state}) => <SeatExplanation name={name} state = {state}/> )}
+                {examples.map( ({name,state}) => <Seat statusDescription={name} state = {state}/> )}
             </div>
             <div className="clients-info">
                 {[{seatId:1}].map( ({seatId}) => <ClientsData seatId = {seatId} /> )}
@@ -27,19 +39,11 @@ export default function SeatsSelection() {
     );
 }
 
-function Seat ({name, id, state}) {
+function Seat ({statusDescription, id, state}) {
     return (
-        <div className={`seat ${state}`}>
-            {name}
-        </div>
-    );
-}
-
-function SeatExplanation ({name, id, state}) {
-    return (
-        <div className="example">
-            <div className={`seat ${state}`}></div>
-            <span>{name}</span>
+        <div>
+            <div className={`seat ${state}`}>{id}</div>
+            {statusDescription ? <span>{statusDescription}</span> : ""}
         </div>
     );
 }

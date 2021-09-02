@@ -26,14 +26,14 @@
     justify-content: space-between;
 }
 
-.seats-screen .seats-explanation .example {
+.seats-screen .seats-explanation > div {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 13px;
 }
 
-.seats-screen .seats-explanation .example .seat {
+.seats-screen .seats-explanation .seat {
     margin-bottom: 6px;
 }
 
