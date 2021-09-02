@@ -11,7 +11,6 @@
     
 }
 
-
 .movies-list img {
     width: 145px;
     height: 209px;
@@ -21,6 +20,6 @@
     margin-bottom: 10px;
 }
 
-.movies-list img:nth-child(2n) {
-    margin-left: 30px;
+.movies-list .movie-poster {
+    margin-right: 10px;
 }

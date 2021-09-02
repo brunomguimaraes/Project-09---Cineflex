@@ -24,7 +24,7 @@
     margin-bottom: 24px;
 }
 
-.sessions-screen .sessions button {
+.sessions-screen .sessions .session {
     width: 83px;
     height: 43px;
     background-color: #E8833A;

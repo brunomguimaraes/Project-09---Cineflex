@@ -1,31 +1,55 @@
 import "./SessionList.css"
+import {Link, useParams} from "react-router-dom"
+import {getMovieById} from "../../serverFunctions.js"
+import { useEffect } from "react"
 
-export default function SessionList() {
-    const list = [1,2,3,4,5,6]
+export default function SessionList({selectedMovie,setSelectedMovie}) {
+
+    const movieId = useParams().movieId
+    useEffect(() => {
+        getMovieById(movieId)
+            .then( resp => setSelectedMovie(resp.data))
+        }
+    ,[]);
+    if(!selectedMovie.days) {
+        return <h1>carregando...</h1>
+    }
     return (
         <section className = "sessions-screen">
             <p>Selecione o horário</p>
             <div className="sessions">
-                {list.map( () => <Day /> )}
+                {selectedMovie.days.map( ({weekday, showtimes, date},index) => 
+                    <Day 
+                        key={index}
+                        weekday = {weekday}
+                        showtimes = {showtimes}
+                        date = {date}
+                    /> )}
             </div>
         </section>
     );
+
 }
 
-function Day({id, weekday, date, showtimes}) {
-    const list = [1,2]
+function Day({ weekday, date, showtimes}) {
     return (
         <>
-        <p>Quinta-feira - 24/06/2021</p>
-        {list.map( () => <ShowTime /> )}
+        <p>{`${weekday} - ${date}`}</p>
+        {showtimes.map( ({ name, id }, index) => 
+            <ShowTime 
+                key = {index}
+                name={name}
+                id={id}
+            /> 
+        )}
         </>
     );
 }
 
-function ShowTime () {
+function ShowTime ({ name, id }) {
     return (
-        <button>
-            15:00
-        </button>
+        <Link to = {`/sessao/${id}`}>
+            <button className = "session"> {name} </button>
+        </Link>
     );
-}
+} 
