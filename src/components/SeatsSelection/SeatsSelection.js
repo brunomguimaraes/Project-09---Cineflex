@@ -3,7 +3,7 @@ import {Link, useParams} from "react-router-dom"
 import {getSeatsForSession} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
-export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat}) {
+export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat, changeClientData}) {
     const sessionId = useParams().sessionId
     useEffect(() => {
         getSeatsForSession(sessionId)
@@ -42,10 +42,11 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                     />)}
             </div>
             <div className="clients-info">
-                {selectedSeats.clients.map( ({seatNumber},index) => 
+                {selectedSeats.clients.map( ({seatName},index) => 
                     <ClientsData
                         key = {index}
-                        seatNumber = {seatNumber}
+                        seatName = {seatName}
+                        changeClientData = {changeClientData}
                     /> )}
             </div>
             <button className="forward">
@@ -80,17 +81,17 @@ function SeatExplanation ({description,seatClass}) {
     );
 }
 
-function ClientsData({seatNumber}) {
+function ClientsData({seatName,changeClientData}) {
     return (
         <div className="client-data">
             <p>
-                Nome do comprador do assento {seatNumber}:
+                Nome do comprador do assento {seatName}:
             </p>
-            <input placeholder= "Digite seu nome..." />
+            <input onChange = { (e) => changeClientData( "name", e.target.value, seatName )} placeholder= "Digite seu nome..." />
             <p>
-                CPF do comprador do assento {seatNumber}:
+                CPF do comprador do assento {seatName}:
             </p>
-            <input placeholder= "Digite seu CPF..." />
+            <input onChange = { (e) => changeClientData( "cpf", e.target.value, seatName )} placeholder= "Digite seu CPF..." />
         </div>
     );
 }

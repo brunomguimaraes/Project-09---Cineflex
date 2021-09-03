@@ -22,7 +22,7 @@ export default function App() {
       const newSelectedSeats = {...selectedSeats};
       newSelectedSeats.ids.push(seatId);
       newSelectedSeats.ids.sort((a,b) => a-b);
-      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatNumber: seatName});
+      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatName: seatName});
       newSelectedSeats.clients.sort((a, b) => (a.idAssento > b.idAssento) ? 1 : -1);
       setSelectedSeats(newSelectedSeats);
     } else if (seatClass === "selected") {
@@ -31,6 +31,16 @@ export default function App() {
       newSelectedSeats.clients = newSelectedSeats.clients.filter( ( {idAssento} ) => idAssento !== seatId);
       setSelectedSeats(newSelectedSeats);
     }
+  }
+
+  function changeClientData ( type, inputValue, currentSeatName ) {
+    const newSelectedSeats = {...selectedSeats};
+    if (type==="name") {
+      newSelectedSeats.clients.find( ({seatName}) => seatName = currentSeatName ).nome = inputValue;
+    } else if (type==="cpf") {
+      newSelectedSeats.clients.find( ({seatName}) => seatName = currentSeatName ).cpf = inputValue;
+    }
+    setSelectedSeats(newSelectedSeats);
   }
 
   return (
@@ -50,6 +60,7 @@ export default function App() {
             setSelectedSession = {setSelectedSession}
             selectedSeats = {selectedSeats}
             selectAvailableSeat = {selectAvailableSeat}
+            changeClientData = {changeClientData}
           />
         </Route>
         <Route path = "/sucesso" exact>
