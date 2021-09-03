@@ -15,16 +15,16 @@ export default function MoviesList() {
         <section className = "movies-list">
             <p>Selecione o filme</p>
             <div>
-              {moviesList.map( ({posterURL, id}, index) => <Movie key = {index} posterURL={posterURL} id={id}/> )}
+              {moviesList.map( ({title, posterURL, id}, index) => <Movie key = {index} title = {title} posterURL={posterURL} id={id}/> )}
             </div>
         </section>
     );
 }
 
-function Movie({posterURL,id}) {
+function Movie({ title, posterURL, id }) {
     return (
         <Link className = "movie-poster" to={`/filme/${id}`}>
-            <img src={posterURL} />
+            <img src={posterURL} alt = {title}/>
         </Link>
     );
 }

@@ -14,16 +14,21 @@ export default function App() {
   const [selectedSession, setSelectedSession] = useState({day:""})
   const [selectedSeats, setSelectedSeats] = useState({ids:[], compradores:[], names:[]})
 
-  function selectAvailableSeat ({name, id, seatClass}) {
+  function selectAvailableSeat ({name:seatName, id:seatId, seatClass}) {
     if (seatClass === "unavailable") {
-      alert("Este assento não está disponível!")
+      alert("Este assento não está disponível!");
       return
     } else if (seatClass === "available") {
-      const newSelectedSeats = {...selectedSeats}
-      newSelectedSeats.ids.push(id);
-      newSelectedSeats.ids.sort((a,b) => a-b)
-      newSelectedSeats.names.push(Number(name));
-      newSelectedSeats.names.sort((a,b) => a-b)
+      const newSelectedSeats = {...selectedSeats};
+      newSelectedSeats.ids.push(seatId);
+      newSelectedSeats.ids.sort((a,b) => a-b);
+      newSelectedSeats.names.push(Number(seatName));
+      newSelectedSeats.names.sort((a,b) => a-b);
+      setSelectedSeats(newSelectedSeats);
+    } else if (seatClass === "selected") {
+      const newSelectedSeats = {...selectedSeats};
+      newSelectedSeats.ids = newSelectedSeats.ids.filter( savedId => savedId !== seatId);
+      newSelectedSeats.names = newSelectedSeats.names.filter( savedName => savedName !== Number(seatName));
       setSelectedSeats(newSelectedSeats);
     }
 

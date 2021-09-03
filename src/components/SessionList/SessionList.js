@@ -14,7 +14,6 @@ export default function SessionList({selectedMovie,setSelectedMovie}) {
     if(!selectedMovie.days) {
         return <h1>carregando...</h1>
     }
-    console.log(selectedMovie.days)
     return (
         <section className = "sessions-screen">
             <p>Selecione o horário</p>

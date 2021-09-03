@@ -16,7 +16,6 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
     }
 
     const sessionSeats = [...selectedSession.seats];
-    console.log(sessionSeats)
     const examples = [
         {description: "Selecionado", seatClass:"selected"},
         {description: "Disponível", seatClass:"available"},

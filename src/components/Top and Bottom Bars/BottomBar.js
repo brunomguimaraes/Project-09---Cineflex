@@ -6,7 +6,7 @@ export default function BottomBar({movie:{title, posterURL}, session:{name:movie
     };
     return (
         <footer>
-            <img src={posterURL} />
+            <img src={posterURL} alt={title}/>
             <div>
                 <p>{title}</p>
                 {movieSession ? <p>{`${weekday} - ${movieSession}`}</p> : ""}
