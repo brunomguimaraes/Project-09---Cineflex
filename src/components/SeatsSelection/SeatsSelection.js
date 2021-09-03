@@ -3,7 +3,7 @@ import {Link, useParams} from "react-router-dom"
 import {getSeatsForSession} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
-export default function SeatsSelection({selectedSession, setSelectedSession}) {
+export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,setSelectedSeats}) {
     const sessionId = useParams().sessionId
     useEffect(() => {
         getSeatsForSession(sessionId)
@@ -11,26 +11,35 @@ export default function SeatsSelection({selectedSession, setSelectedSession}) {
         }
     ,[]);
 
+    if(!selectedSession.seats) {
+        return <h1>carregando...</h1>
+    }
 
-    
+    const sessionSeats = [...selectedSession.seats];
+    console.log(sessionSeats)
     const examples = [
-        {name: "Selecionado", state:"selected"},
-        {name: "Disponível", state:"available"},
-        {name: "Indisponível", state:"unavailable"}
+        {description: "Selecionado", seatClass:"selected"},
+        {description: "Disponível", seatClass:"available"},
+        {description: "Indisponível", seatClass:"unavailable"}
     ]
-    const list = [];
-    for (let i = 1 ; i <= 50 ; i++) { list.push({name: i, state:"available"})};
     return (
         <section className = "seats-screen">
             <p>Selecione o(s) assento(s)</p>
             <div className="session-seats">
-                {list.map( ({name,state}) => <Seat id={name} state = {state}/> )}
+                {sessionSeats.map( ({name,id, isAvailable},index) => 
+                    <Seat 
+                        key = {index}
+                        name = {name}
+                        id = {id} 
+                        isAvailable = {isAvailable}
+                        selectedSeats = {selectedSeats}
+                    /> )}
             </div>
             <div className="seats-explanation">
-                {examples.map( ({name,state}) => <Seat statusDescription={name} state = {state}/> )}
+                {examples.map( ({description,seatClass},index) => <SeatExplanation key = {index} description = {description} seatClass = {seatClass} />)}
             </div>
             <div className="clients-info">
-                {[{seatId:1}].map( ({seatId}) => <ClientsData seatId = {seatId} /> )}
+                {[{seatId:1}].map( ({seatId},index) => <ClientsData key = {index} seatId = {seatId} /> )}
             </div>
             <button className="forward">
                 Reservar assento(s)
@@ -39,11 +48,27 @@ export default function SeatsSelection({selectedSession, setSelectedSession}) {
     );
 }
 
-function Seat ({statusDescription, id, state}) {
+function Seat ({name, id, isAvailable, selectedSeats}) {
+    let seatClass;
+    if (selectedSeats.ids.includes(id)) {
+        seatClass = "selected";
+    } else if (isAvailable) {
+        seatClass = "available";
+    } else {
+        seatClass = "unavailable";
+    }
     return (
         <div>
-            <div className={`seat ${state}`}>{id}</div>
-            {statusDescription ? <span>{statusDescription}</span> : ""}
+            <div className={`seat ${seatClass}`}>{name}</div>
+        </div>
+    );
+}
+
+function SeatExplanation ({description,seatClass}) {
+    return (
+        <div>
+            <div className={`seat ${seatClass}`}></div>
+            {description ? <span>{description}</span> : ""}
         </div>
     );
 }
@@ -52,11 +77,11 @@ function ClientsData({seatId}) {
     return (
         <div className="client-data">
             <p>
-                Nome do compador do assento {seatId}:
+                Nome do comprador do assento {seatId}:
             </p>
             <input placeholder= "Digite seu nome..." />
             <p>
-                CPF do compador do assento {seatId}:
+                CPF do comprador do assento {seatId}:
             </p>
             <input placeholder= "Digite seu CPF..." />
         </div>

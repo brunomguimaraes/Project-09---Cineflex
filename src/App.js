@@ -12,6 +12,7 @@ import SuccessfulPurchase from "./components/SuccessfulPurchase/SucessfulPurchas
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState({})
   const [selectedSession, setSelectedSession] = useState({day:""})
+  const [selectedSeats, setSelectedSeats] = useState({ids:[],compradores:[]})
   return (
     <Router>
       <TopBar />
@@ -24,7 +25,12 @@ export default function App() {
           <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie}/>
         </Route>
         <Route path = "/sessao/:sessionId" exact>
-          <SeatsSelection selectedSession = {selectedSession} setSelectedSession = {setSelectedSession}/>
+          <SeatsSelection 
+            selectedSession = {selectedSession}
+            setSelectedSession = {setSelectedSession}
+            selectedSeats = {selectedSeats}
+            setSelectedSeats = {setSelectedSeats}
+          />
         </Route>
         <Route path = "/sucesso" exact>
           <SuccessfulPurchase />
