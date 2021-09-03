@@ -1,5 +1,5 @@
 import "./SeatsSelection.css"
-import {Link, useParams} from "react-router-dom"
+import {Link, useParams, useHistory} from "react-router-dom"
 import {getSeatsForSession} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
@@ -12,13 +12,18 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
     ,[]);
 
     if(!selectedSession.seats) {
-        return <h1>carregando...</h1>
+        return (
+            <section className = "seats-screen">
+                <p>carregando...</p>
+            </section>
+        );
     }
     const examples = [
         {description: "Selecionado", seatClass:"selected"},
         {description: "Disponível", seatClass:"available"},
         {description: "Indisponível", seatClass:"unavailable"}
     ]
+
     return (
         <section className = "seats-screen">
             <p>Selecione o(s) assento(s)</p>
@@ -42,16 +47,14 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                     />)}
             </div>
             <div className="clients-info">
-                {selectedSeats.clients.map( ({seatName},index) => 
+                {selectedSeats.clients.map( (clientData,index) => 
                     <ClientsData
                         key = {index}
-                        seatName = {seatName}
+                        clientData = {clientData}
                         changeClientData = {changeClientData}
                     /> )}
             </div>
-            <button className="forward">
-                Reservar assento(s)
-            </button>
+            <ForwardButton selectedSeats = {selectedSeats} />
         </section>
     );
 }
@@ -81,17 +84,50 @@ function SeatExplanation ({description,seatClass}) {
     );
 }
 
-function ClientsData({seatName,changeClientData}) {
+function ClientsData({clientData,changeClientData}) {
     return (
         <div className="client-data">
             <p>
-                Nome do comprador do assento {seatName}:
+                Nome do comprador do assento {clientData.seatName}:
             </p>
-            <input onChange = { (e) => changeClientData( "name", e.target.value, seatName )} placeholder= "Digite seu nome..." />
+            <input 
+                onChange = { (e) => changeClientData( "name", e.target.value, clientData.seatName )}
+                placeholder= "Digite seu nome..."
+                value = {clientData.nome}
+            />
             <p>
-                CPF do comprador do assento {seatName}:
+                CPF do comprador do assento {clientData.seatName}:
             </p>
-            <input onChange = { (e) => changeClientData( "cpf", e.target.value, seatName )} placeholder= "Digite seu CPF..." />
+            <input
+                type = "number"
+                onChange = { (e) => changeClientData( "cpf", e.target.value, clientData.seatName )}
+                placeholder= "Digite seu CPF..."
+                value = {clientData.cpf}
+            />
         </div>
+    );
+}
+
+function ForwardButton ({selectedSeats}) {
+    console.log(selectedSeats)
+    const history = useHistory()
+
+    function isClientDataValid({nome,cpf}) {
+        return nome.length && cpf.length === 11 
+    }
+
+    function checkDataValidation() {
+        if (selectedSeats.clients.length) {
+            if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
+                        //history.push("/sucesso");
+            } else {alert("Por favor complete as informações dos compradores de forma correta")}
+        }else {alert("Por favor selecione ao menos um assento")}
+
+    }
+
+    return (
+        <button className="forward" onClick = {checkDataValidation}>
+            Reservar assento(s)
+        </button>
     );
 }

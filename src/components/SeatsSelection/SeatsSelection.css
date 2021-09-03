@@ -11,6 +11,7 @@
     display: inline-block;
     margin: 39px 0px;
     font-size: 24px; 
+    text-align: center;
 }
 
 .seats-screen .session-seats {
@@ -92,5 +93,5 @@
     border-radius: 3px;
     color: #FFFFFF;
     font-size: 18px;
-    margin: 40px auto 0px;
+    margin: 40px auto;
 }

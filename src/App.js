@@ -27,8 +27,8 @@ export default function App() {
       setSelectedSeats(newSelectedSeats);
     } else if (seatClass === "selected") {
       const newSelectedSeats = {...selectedSeats};
-      const currentClientName = newSelectedSeats.clients.find( ({seatName}) => seatName = name ).nome
-      const currentClientCpf = newSelectedSeats.clients.find( ({seatName}) => seatName = name ).cpf
+      const currentClientName = newSelectedSeats.clients.find( ({seatName}) => seatName === name ).nome
+      const currentClientCpf = newSelectedSeats.clients.find( ({seatName}) => seatName === name ).cpf
       if (currentClientName || currentClientCpf) {
         if (!window.confirm("Você tem certeza que deseja desmarcar este assento?")) {
           return
@@ -43,9 +43,9 @@ export default function App() {
   function changeClientData ( type, inputValue, currentSeatName ) {
     const newSelectedSeats = {...selectedSeats};
     if (type==="name") {
-      newSelectedSeats.clients.find( ({seatName}) => seatName = currentSeatName ).nome = inputValue;
+      newSelectedSeats.clients.find( ({seatName}) => seatName === currentSeatName ).nome = inputValue;
     } else if (type==="cpf") {
-      newSelectedSeats.clients.find( ({seatName}) => seatName = currentSeatName ).cpf = inputValue;
+      newSelectedSeats.clients.find( ({seatName}) => seatName === currentSeatName ).cpf = inputValue;
     }
     setSelectedSeats(newSelectedSeats);
   }
