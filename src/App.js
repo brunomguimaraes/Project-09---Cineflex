@@ -14,7 +14,7 @@ export default function App() {
   const [selectedSession, setSelectedSession] = useState({day:""})
   const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]})
 
-  function selectAvailableSeat ({name:seatName, id:seatId, seatClass}) {
+  function selectAvailableSeat ({name, id:seatId, seatClass}) {
     if (seatClass === "unavailable") {
       alert("Este assento não está disponível!");
       return
@@ -22,11 +22,18 @@ export default function App() {
       const newSelectedSeats = {...selectedSeats};
       newSelectedSeats.ids.push(seatId);
       newSelectedSeats.ids.sort((a,b) => a-b);
-      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatName: seatName});
+      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatName: name});
       newSelectedSeats.clients.sort((a, b) => (a.idAssento > b.idAssento) ? 1 : -1);
       setSelectedSeats(newSelectedSeats);
     } else if (seatClass === "selected") {
       const newSelectedSeats = {...selectedSeats};
+      const currentClientName = newSelectedSeats.clients.find( ({seatName}) => seatName = name ).nome
+      const currentClientCpf = newSelectedSeats.clients.find( ({seatName}) => seatName = name ).cpf
+      if (currentClientName || currentClientCpf) {
+        if (!window.confirm("Você tem certeza que deseja desmarcar este assento?")) {
+          return
+        }
+      }
       newSelectedSeats.ids = newSelectedSeats.ids.filter( savedId => savedId !== seatId);
       newSelectedSeats.clients = newSelectedSeats.clients.filter( ( {idAssento} ) => idAssento !== seatId);
       setSelectedSeats(newSelectedSeats);
