@@ -12,7 +12,23 @@ import SuccessfulPurchase from "./components/SuccessfulPurchase/SucessfulPurchas
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState({})
   const [selectedSession, setSelectedSession] = useState({day:""})
-  const [selectedSeats, setSelectedSeats] = useState({ids:[],compradores:[]})
+  const [selectedSeats, setSelectedSeats] = useState({ids:[], compradores:[], names:[]})
+
+  function selectAvailableSeat ({name, id, seatClass}) {
+    if (seatClass === "unavailable") {
+      alert("Este assento não está disponível!")
+      return
+    } else if (seatClass === "available") {
+      const newSelectedSeats = {...selectedSeats}
+      newSelectedSeats.ids.push(id);
+      newSelectedSeats.ids.sort((a,b) => a-b)
+      newSelectedSeats.names.push(Number(name));
+      newSelectedSeats.names.sort((a,b) => a-b)
+      setSelectedSeats(newSelectedSeats);
+    }
+
+
+  }
   return (
     <Router>
       <TopBar />
@@ -29,7 +45,7 @@ export default function App() {
             selectedSession = {selectedSession}
             setSelectedSession = {setSelectedSession}
             selectedSeats = {selectedSeats}
-            setSelectedSeats = {setSelectedSeats}
+            selectAvailableSeat = {selectAvailableSeat}
           />
         </Route>
         <Route path = "/sucesso" exact>

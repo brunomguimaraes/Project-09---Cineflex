@@ -3,7 +3,7 @@ import {Link, useParams} from "react-router-dom"
 import {getSeatsForSession} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
-export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,setSelectedSeats}) {
+export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat}) {
     const sessionId = useParams().sessionId
     useEffect(() => {
         getSeatsForSession(sessionId)
@@ -33,13 +33,23 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                         id = {id} 
                         isAvailable = {isAvailable}
                         selectedSeats = {selectedSeats}
+                        selectAvailableSeat = {selectAvailableSeat}
                     /> )}
             </div>
             <div className="seats-explanation">
-                {examples.map( ({description,seatClass},index) => <SeatExplanation key = {index} description = {description} seatClass = {seatClass} />)}
+                {examples.map( ({description,seatClass},index) => 
+                    <SeatExplanation 
+                        key = {index}
+                        description = {description}
+                        seatClass = {seatClass}
+                    />)}
             </div>
             <div className="clients-info">
-                {[{seatId:1}].map( ({seatId},index) => <ClientsData key = {index} seatId = {seatId} /> )}
+                {[{seatId:1}].map( ({seatId},index) => 
+                    <ClientsData
+                        key = {index}
+                        seatId = {seatId}
+                    /> )}
             </div>
             <button className="forward">
                 Reservar assento(s)
@@ -48,7 +58,7 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
     );
 }
 
-function Seat ({name, id, isAvailable, selectedSeats}) {
+function Seat ({name, id, isAvailable, selectedSeats, selectAvailableSeat}) {
     let seatClass;
     if (selectedSeats.ids.includes(id)) {
         seatClass = "selected";
@@ -58,9 +68,9 @@ function Seat ({name, id, isAvailable, selectedSeats}) {
         seatClass = "unavailable";
     }
     return (
-        <div>
+        <button onClick = {() => selectAvailableSeat({name, id, seatClass})}>
             <div className={`seat ${seatClass}`}>{name}</div>
-        </div>
+        </button>
     );
 }
 
