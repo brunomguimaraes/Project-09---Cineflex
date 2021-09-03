@@ -14,8 +14,6 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
     if(!selectedSession.seats) {
         return <h1>carregando...</h1>
     }
-
-    const sessionSeats = [...selectedSession.seats];
     const examples = [
         {description: "Selecionado", seatClass:"selected"},
         {description: "Disponível", seatClass:"available"},
@@ -25,7 +23,7 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
         <section className = "seats-screen">
             <p>Selecione o(s) assento(s)</p>
             <div className="session-seats">
-                {sessionSeats.map( ({name,id, isAvailable},index) => 
+                {selectedSession.seats.map( ({name,id, isAvailable},index) => 
                     <Seat 
                         key = {index}
                         name = {name}
@@ -44,10 +42,10 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                     />)}
             </div>
             <div className="clients-info">
-                {[{seatId:1}].map( ({seatId},index) => 
+                {selectedSeats.clients.map( ({seatNumber},index) => 
                     <ClientsData
                         key = {index}
-                        seatId = {seatId}
+                        seatNumber = {seatNumber}
                     /> )}
             </div>
             <button className="forward">
@@ -82,15 +80,15 @@ function SeatExplanation ({description,seatClass}) {
     );
 }
 
-function ClientsData({seatId}) {
+function ClientsData({seatNumber}) {
     return (
         <div className="client-data">
             <p>
-                Nome do comprador do assento {seatId}:
+                Nome do comprador do assento {seatNumber}:
             </p>
             <input placeholder= "Digite seu nome..." />
             <p>
-                CPF do comprador do assento {seatId}:
+                CPF do comprador do assento {seatNumber}:
             </p>
             <input placeholder= "Digite seu CPF..." />
         </div>

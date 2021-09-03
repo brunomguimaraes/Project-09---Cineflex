@@ -12,7 +12,7 @@ import SuccessfulPurchase from "./components/SuccessfulPurchase/SucessfulPurchas
 export default function App() {
   const [selectedMovie, setSelectedMovie] = useState({})
   const [selectedSession, setSelectedSession] = useState({day:""})
-  const [selectedSeats, setSelectedSeats] = useState({ids:[], compradores:[], names:[]})
+  const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]})
 
   function selectAvailableSeat ({name:seatName, id:seatId, seatClass}) {
     if (seatClass === "unavailable") {
@@ -22,18 +22,17 @@ export default function App() {
       const newSelectedSeats = {...selectedSeats};
       newSelectedSeats.ids.push(seatId);
       newSelectedSeats.ids.sort((a,b) => a-b);
-      newSelectedSeats.names.push(Number(seatName));
-      newSelectedSeats.names.sort((a,b) => a-b);
+      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatNumber: seatName});
+      newSelectedSeats.clients.sort((a, b) => (a.idAssento > b.idAssento) ? 1 : -1);
       setSelectedSeats(newSelectedSeats);
     } else if (seatClass === "selected") {
       const newSelectedSeats = {...selectedSeats};
       newSelectedSeats.ids = newSelectedSeats.ids.filter( savedId => savedId !== seatId);
-      newSelectedSeats.names = newSelectedSeats.names.filter( savedName => savedName !== Number(seatName));
+      newSelectedSeats.clients = newSelectedSeats.clients.filter( ( {idAssento} ) => idAssento !== seatId);
       setSelectedSeats(newSelectedSeats);
     }
-
-
   }
+
   return (
     <Router>
       <TopBar />
