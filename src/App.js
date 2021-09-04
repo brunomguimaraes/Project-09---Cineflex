@@ -13,7 +13,7 @@ export default function App() {
   const [selectedMovie, setSelectedMovie] = useState({});
   const [selectedSession, setSelectedSession] = useState({day:""});
   const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]});
-  const [enableBottomBar, setEnableBottomBar] = useState(false);
+  const [enableBottomBarAndBackButton, setEnableBottomBarAndBackButton] = useState(false);
 
   function selectAvailableSeat ({name, id:newSeatId, seatClass}) {
     if (seatClass === "unavailable") {
@@ -51,22 +51,22 @@ export default function App() {
     setSelectedSeats(newSelectedSeats);
   }
 
-  function resetPurchaseData(){
-    setSelectedMovie({});
-    setSelectedSession({day:""});
-    setSelectedSeats({ids:[], clients:[]});
+  function resetPurchaseData({ movie, session, seats}){
+    if (movie) { setSelectedMovie({}) }
+    if (session) { setSelectedSession({ day:"" }) }
+    if (seats) { setSelectedSeats({ ids:[], clients:[] }) }
   }
 
   return (
     <Router>
-      <TopBar />
-      <BottomBar enabled = {enableBottomBar} movie={selectedMovie} session={selectedSession}/>
+      <TopBar enabled = {enableBottomBarAndBackButton} resetPurchaseData = {resetPurchaseData} />
+      <BottomBar enabled = {enableBottomBarAndBackButton} movie={selectedMovie} session={selectedSession}/>
       <Switch>
         <Route path = "/" exact>
-          <MoviesList />
+          <MoviesList setEnableBottomBarAndBackButton = {setEnableBottomBarAndBackButton} />
         </Route>
         <Route path = "/filme/:movieId" exact>
-          <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie} setEnableBottomBar={setEnableBottomBar}/>
+          <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie} setEnableBottomBarAndBackButton={setEnableBottomBarAndBackButton}/>
         </Route>
         <Route path = "/sessao/:sessionId" exact>
           <SeatsSelection 
@@ -83,7 +83,7 @@ export default function App() {
             selectedSession = {selectedSession}
             selectedSeats = {selectedSeats}
             resetPurchaseData = {resetPurchaseData}
-            setEnableBottomBar = {setEnableBottomBar}
+            setEnableBottomBarAndBackButton = {setEnableBottomBarAndBackButton}
           />
         </Route>
       </Switch>
