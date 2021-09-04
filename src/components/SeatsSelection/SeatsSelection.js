@@ -1,6 +1,6 @@
 import "./SeatsSelection.css"
-import {Link, useParams, useHistory} from "react-router-dom"
-import {getSeatsForSession} from "../../serverFunctions.js"
+import { useParams, useHistory} from "react-router-dom"
+import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer } from "../../serverFunctions.js"
 import { useEffect } from "react"
 
 export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat, changeClientData}) {
@@ -109,7 +109,6 @@ function ClientsData({clientData,changeClientData}) {
 }
 
 function ForwardButton ({selectedSeats}) {
-    console.log(selectedSeats)
     const history = useHistory()
 
     function isClientDataValid({nome,cpf}) {
@@ -119,7 +118,8 @@ function ForwardButton ({selectedSeats}) {
     function checkDataValidation() {
         if (selectedSeats.clients.length) {
             if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
-                        //history.push("/sucesso");
+                adjustSelectedSeatsDataAndSendToServer(selectedSeats)
+                history.push("/sucesso");
             } else {alert("Por favor complete as informações dos compradores de forma correta")}
         }else {alert("Por favor selecione ao menos um assento")}
 

@@ -13,3 +13,9 @@ export function getMovieById (movieId) {
 export function getSeatsForSession(sessionId) {
     return axios.get(`${mainUrl}/showtimes/${sessionId}/seats`)
 }
+
+export function adjustSelectedSeatsDataAndSendToServer ({ids,clients}) {
+    const compradores = clients.map( ({seatId,nome,cpf}) => ({idAssento:seatId, nome, cpf }) );
+    const modifiedSelectedSeatsData = {ids:ids, compradores:compradores};
+    console.log(modifiedSelectedSeatsData)
+}

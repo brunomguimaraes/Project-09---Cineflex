@@ -14,16 +14,16 @@ export default function App() {
   const [selectedSession, setSelectedSession] = useState({day:""})
   const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]})
 
-  function selectAvailableSeat ({name, id:seatId, seatClass}) {
+  function selectAvailableSeat ({name, id:newSeatId, seatClass}) {
     if (seatClass === "unavailable") {
       alert("Este assento não está disponível!");
       return
     } else if (seatClass === "available") {
       const newSelectedSeats = {...selectedSeats};
-      newSelectedSeats.ids.push(seatId);
+      newSelectedSeats.ids.push(newSeatId);
       newSelectedSeats.ids.sort((a,b) => a-b);
-      newSelectedSeats.clients.push({idAssento: seatId, nome:"", cpf:"", seatName: name});
-      newSelectedSeats.clients.sort((a, b) => (a.idAssento > b.idAssento) ? 1 : -1);
+      newSelectedSeats.clients.push({seatId: newSeatId, nome:"", cpf:"", seatName: name});
+      newSelectedSeats.clients.sort((a, b) => (a.seatId > b.seatId) ? 1 : -1);
       setSelectedSeats(newSelectedSeats);
     } else if (seatClass === "selected") {
       const newSelectedSeats = {...selectedSeats};
@@ -34,8 +34,8 @@ export default function App() {
           return
         }
       }
-      newSelectedSeats.ids = newSelectedSeats.ids.filter( savedId => savedId !== seatId);
-      newSelectedSeats.clients = newSelectedSeats.clients.filter( ( {idAssento} ) => idAssento !== seatId);
+      newSelectedSeats.ids = newSelectedSeats.ids.filter( savedId => savedId !== newSeatId);
+      newSelectedSeats.clients = newSelectedSeats.clients.filter( ( {seatId} ) => seatId !== newSeatId);
       setSelectedSeats(newSelectedSeats);
     }
   }
@@ -48,6 +48,12 @@ export default function App() {
       newSelectedSeats.clients.find( ({seatName}) => seatName === currentSeatName ).cpf = inputValue;
     }
     setSelectedSeats(newSelectedSeats);
+  }
+
+  function resetMovieData(){
+    setSelectedMovie({});
+    setSelectedSession({day:""});
+    setSelectedSeats({ids:[], clients:[]});
   }
 
   return (
