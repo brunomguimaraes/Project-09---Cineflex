@@ -109,8 +109,7 @@ function ClientsData({clientData,changeClientData}) {
 }
 
 function ForwardButton ({selectedSeats}) {
-    const history = useHistory()
-
+    const browsingHistory = useHistory()
     function isClientDataValid({nome,cpf}) {
         return nome.length && cpf.length === 11 
     }
@@ -119,7 +118,7 @@ function ForwardButton ({selectedSeats}) {
         if (selectedSeats.clients.length) {
             if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
                 adjustSelectedSeatsDataAndSendToServer(selectedSeats)
-                history.push("/sucesso");
+                browsingHistory.push("/sucesso");
             } else {alert("Por favor complete as informações dos compradores de forma correta")}
         }else {alert("Por favor selecione ao menos um assento")}
 
