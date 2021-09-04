@@ -63,7 +63,7 @@ export default function App() {
       <BottomBar enabled = {enableBottomBarAndBackButton} movie={selectedMovie} session={selectedSession}/>
       <Switch>
         <Route path = "/" exact>
-          <MoviesList setEnableBottomBarAndBackButton = {setEnableBottomBarAndBackButton} />
+          <MoviesList resetPurchaseData = {resetPurchaseData} setEnableBottomBarAndBackButton = {setEnableBottomBarAndBackButton} />
         </Route>
         <Route path = "/filme/:movieId" exact>
           <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie} setEnableBottomBarAndBackButton={setEnableBottomBarAndBackButton}/>

@@ -4,7 +4,6 @@ import {AiOutlineRollback} from "react-icons/ai"
 
 export default function TopBar({ enabled, resetPurchaseData }) {
     const browsingHistory = useHistory()
-    console.log(browsingHistory)
     function goBack() {
         if(browsingHistory.location.pathname.includes("filme")) {
             resetPurchaseData({movie:true})

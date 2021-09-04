@@ -37,14 +37,12 @@ function MovieAndSessionData({selectedMovie, selectedSession}){
 }
 
 function SeatsData({selectedSeats}) {
-    console.log(selectedSeats)
-    console.log(selectedSeats.clients)
     return (
         <div className="purchase-information">
             <p className="title">
             {selectedSeats.clients.length === 1 ? "Ingresso" : "Ingressos"}
             </p>
-            {selectedSeats.clients.map( ({seatName}) => <p>{`Assento ${seatName}`}</p> )}
+            {selectedSeats.clients.map( ({seatName}, index ) => <p key = { index } >{`Assento ${seatName}`}</p> )}
         </div>
     );
 }
@@ -58,8 +56,8 @@ function ClientsData({selectedSeats}) {
         <p className="title">
             {selectedSeats.clients.length === 1 ? "Comprador(a)" : "Compradores"}
         </p>
-        {selectedSeats.clients.map( ({seatName, nome, cpf}) => 
-            <div>
+        {selectedSeats.clients.map( ({seatName, nome, cpf}, index) => 
+            <div key = { index } >
                 <p> {selectedSeats.clients.length !== 1 ? `Assento ${seatName}` : ""}  </p>
                 <p> {`Nome: ${nome}`} </p>
                 <p> {`CPF: ${formatCpf(cpf)}`} </p>

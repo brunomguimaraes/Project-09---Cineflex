@@ -1,19 +1,24 @@
 import "./SessionList.css"
-import {Link, useParams} from "react-router-dom"
-import {getMovieById} from "../../serverFunctions.js"
+import {Link, useParams, useHistory} from "react-router-dom"
+import {getMovieById, displayError} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
 export default function SessionList({selectedMovie,setSelectedMovie,setEnableBottomBarAndBackButton}) {
     const movieId = useParams().movieId
+    const browsingHistory = useHistory();
+    setEnableBottomBarAndBackButton(true);
     useEffect(() => {
         getMovieById(movieId)
             .then( resp => setSelectedMovie(resp.data))
+            .catch( () => { displayError(browsingHistory) } );
         }
     ,[]);
+
     if(!selectedMovie.days) {
         return <h1>carregando...</h1>
     }
-    setEnableBottomBarAndBackButton(true);
+
+
     return (
         <section className = "sessions-screen">
             <p>Selecione o horário</p>

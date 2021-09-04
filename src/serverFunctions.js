@@ -17,5 +17,10 @@ export function getSeatsForSession(sessionId) {
 export function adjustSelectedSeatsDataAndSendToServer ({ids,clients}) {
     const compradores = clients.map( ({seatId,nome,cpf}) => ({idAssento:seatId, nome, cpf }) );
     const modifiedSelectedSeatsData = {ids:ids, compradores:compradores};
-    console.log(modifiedSelectedSeatsData)
+    return axios.post(`${mainUrl}/seats/book-many`,modifiedSelectedSeatsData)
+}
+
+export function displayError(browsingHistory) {
+    alert("Oh não, parece que houve um erro! Por favor, tente novamente mais tarde");
+    browsingHistory.replace("/")
 }

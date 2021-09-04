@@ -1,13 +1,17 @@
 import "./SeatsSelection.css"
 import { useParams, useHistory} from "react-router-dom"
-import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer } from "../../serverFunctions.js"
-import { useEffect } from "react"
+import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer, displayError } from "../../serverFunctions.js"
+import { useEffect, useState } from "react"
 
 export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat, changeClientData}) {
-    const sessionId = useParams().sessionId
+    const browsingHistory = useHistory();
+    const sessionId = useParams().sessionId;
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     useEffect(() => {
         getSeatsForSession(sessionId)
             .then( resp => setSelectedSession(resp.data))
+            .catch( () => { displayError(browsingHistory) } )
+
         }
     ,[]);
 
@@ -17,12 +21,12 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                 <p>carregando...</p>
             </section>
         );
-    }
+    };
     const examples = [
         {description: "Selecionado", seatClass:"selected"},
         {description: "Disponível", seatClass:"available"},
         {description: "Indisponível", seatClass:"unavailable"}
-    ]
+    ];
 
     return (
         <section className = "seats-screen">
@@ -54,7 +58,12 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                         changeClientData = {changeClientData}
                     /> )}
             </div>
-            <ForwardButton selectedSeats = {selectedSeats} />
+            <ForwardButton
+                selectedSeats = {selectedSeats}
+                browsingHistory = { browsingHistory }
+                isButtonDisabled = {isButtonDisabled}
+                setIsButtonDisabled = {setIsButtonDisabled}
+            />
         </section>
     );
 }
@@ -108,25 +117,26 @@ function ClientsData({clientData,changeClientData}) {
     );
 }
 
-function ForwardButton ({selectedSeats}) {
-    const browsingHistory = useHistory()
-    console.log(browsingHistory)
+function ForwardButton ({selectedSeats, browsingHistory, isButtonDisabled, setIsButtonDisabled}) {
     function isClientDataValid({nome,cpf}) {
-        return nome.length && cpf.length === 11 
-    }
+        return nome.length && cpf.length === 11 ;
+    };
 
     function checkDataValidation() {
         if (selectedSeats.clients.length) {
             if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
-                adjustSelectedSeatsDataAndSendToServer(selectedSeats)
-                browsingHistory.push("/sucesso");
-            } else {alert("Por favor complete as informações dos compradores de forma correta")}
-        }else {alert("Por favor selecione ao menos um assento")}
+                setIsButtonDisabled(true);
+                const postPromise = adjustSelectedSeatsDataAndSendToServer(selectedSeats)
+                postPromise
+                    .then(() => { browsingHistory.push("/sucesso") })
+                    .catch( () => { displayError(browsingHistory) } )
+            } else {alert("Por favor complete as informações dos compradores de forma correta")};
+        }else {alert("Por favor selecione ao menos um assento")};
 
     }
 
     return (
-        <button className="forward" onClick = {checkDataValidation}>
+        <button className="forward" onClick = {checkDataValidation} disabled={ isButtonDisabled } >
             Reservar assento(s)
         </button>
     );
