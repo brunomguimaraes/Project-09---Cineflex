@@ -110,6 +110,7 @@ function ClientsData({clientData,changeClientData}) {
 
 function ForwardButton ({selectedSeats}) {
     const browsingHistory = useHistory()
+    console.log(browsingHistory)
     function isClientDataValid({nome,cpf}) {
         return nome.length && cpf.length === 11 
     }
