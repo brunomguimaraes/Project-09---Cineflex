@@ -10,9 +10,10 @@ import SeatsSelection from "./components/SeatsSelection/SeatsSelection.js";
 import SuccessfulPurchase from "./components/SuccessfulPurchase/SucessfulPurchase.js"
 
 export default function App() {
-  const [selectedMovie, setSelectedMovie] = useState({})
-  const [selectedSession, setSelectedSession] = useState({day:""})
-  const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]})
+  const [selectedMovie, setSelectedMovie] = useState({});
+  const [selectedSession, setSelectedSession] = useState({day:""});
+  const [selectedSeats, setSelectedSeats] = useState({ids:[], clients:[]});
+  const [enableBottomBar, setEnableBottomBar] = useState(false);
 
   function selectAvailableSeat ({name, id:newSeatId, seatClass}) {
     if (seatClass === "unavailable") {
@@ -50,7 +51,7 @@ export default function App() {
     setSelectedSeats(newSelectedSeats);
   }
 
-  function resetMovieData(){
+  function resetPurchaseData(){
     setSelectedMovie({});
     setSelectedSession({day:""});
     setSelectedSeats({ids:[], clients:[]});
@@ -59,13 +60,13 @@ export default function App() {
   return (
     <Router>
       <TopBar />
-      <BottomBar movie={selectedMovie} session={selectedSession}/>
+      <BottomBar enabled = {enableBottomBar} movie={selectedMovie} session={selectedSession}/>
       <Switch>
         <Route path = "/" exact>
           <MoviesList />
         </Route>
         <Route path = "/filme/:movieId" exact>
-          <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie}/>
+          <SessionList selectedMovie = {selectedMovie} setSelectedMovie = {setSelectedMovie} setEnableBottomBar={setEnableBottomBar}/>
         </Route>
         <Route path = "/sessao/:sessionId" exact>
           <SeatsSelection 
@@ -77,7 +78,13 @@ export default function App() {
           />
         </Route>
         <Route path = "/sucesso" exact>
-          <SuccessfulPurchase />
+          <SuccessfulPurchase 
+            selectedMovie = {selectedMovie}
+            selectedSession = {selectedSession}
+            selectedSeats = {selectedSeats}
+            resetPurchaseData = {resetPurchaseData}
+            setEnableBottomBar = {setEnableBottomBar}
+          />
         </Route>
       </Switch>
     </Router>

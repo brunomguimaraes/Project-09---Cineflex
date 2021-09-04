@@ -3,8 +3,7 @@ import {Link, useParams} from "react-router-dom"
 import {getMovieById} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
-export default function SessionList({selectedMovie,setSelectedMovie}) {
-
+export default function SessionList({selectedMovie,setSelectedMovie,setEnableBottomBar}) {
     const movieId = useParams().movieId
     useEffect(() => {
         getMovieById(movieId)
@@ -14,6 +13,7 @@ export default function SessionList({selectedMovie,setSelectedMovie}) {
     if(!selectedMovie.days) {
         return <h1>carregando...</h1>
     }
+    setEnableBottomBar(true);
     return (
         <section className = "sessions-screen">
             <p>Selecione o horário</p>
