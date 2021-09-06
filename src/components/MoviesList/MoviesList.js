@@ -1,11 +1,12 @@
 import "./MoviesList.css";
 import { getMoviesList, displayError } from "../../serverFunctions.js"
+import Loading from "../Loading/Loading.js"
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom"
 
 export default function MoviesList({setEnableBottomBarAndBackButton, resetPurchaseData }) {
     setEnableBottomBarAndBackButton(false)
-    const [moviesList,setMoviesList] = useState([]);
+    const [moviesList,setMoviesList] = useState("");
     const browsingHistory = useHistory();
     useEffect( () => {
         resetPurchaseData({movie:true, session:true, seats:true})
@@ -14,8 +15,12 @@ export default function MoviesList({setEnableBottomBarAndBackButton, resetPurcha
             .catch( () => { displayError(browsingHistory) } );
         }
     ,[]);
-
     
+    if (!moviesList) {
+        return (
+            <Loading />
+        );
+    }
 
     return (
         <section className = "movies-list">

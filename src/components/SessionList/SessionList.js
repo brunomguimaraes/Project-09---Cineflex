@@ -1,5 +1,6 @@
 import "./SessionList.css"
 import {Link, useParams, useHistory} from "react-router-dom"
+import Loading from "../Loading/Loading.js"
 import {getMovieById, displayError} from "../../serverFunctions.js"
 import { useEffect } from "react"
 
@@ -15,7 +16,9 @@ export default function SessionList({selectedMovie,setSelectedMovie,setEnableBot
     ,[]);
 
     if(!selectedMovie.days) {
-        return <h1>carregando...</h1>
+        return (
+            <Loading />
+        );
     }
 
 

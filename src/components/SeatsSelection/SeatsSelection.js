@@ -1,12 +1,13 @@
 import "./SeatsSelection.css"
 import { useParams, useHistory} from "react-router-dom"
+import Loading from "../Loading/Loading.js"
 import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer, displayError } from "../../serverFunctions.js"
 import { useEffect, useState } from "react"
 
 export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat, changeClientData}) {
     const browsingHistory = useHistory();
     const sessionId = useParams().sessionId;
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [isPostRequisitionSent, setIsPostRequisitionSent] = useState(false);
     useEffect(() => {
         getSeatsForSession(sessionId)
             .then( resp => setSelectedSession(resp.data))
@@ -15,11 +16,9 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
         }
     ,[]);
 
-    if(!selectedSession.seats) {
+    if(!selectedSession.seats || isPostRequisitionSent) {
         return (
-            <section className = "seats-screen">
-                <p>carregando...</p>
-            </section>
+            <Loading />
         );
     };
     const examples = [
@@ -61,8 +60,7 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
             <ForwardButton
                 selectedSeats = {selectedSeats}
                 browsingHistory = { browsingHistory }
-                isButtonDisabled = {isButtonDisabled}
-                setIsButtonDisabled = {setIsButtonDisabled}
+                setIsPostRequisitionSent = {setIsPostRequisitionSent}
             />
         </section>
     );
@@ -117,7 +115,7 @@ function ClientsData({clientData,changeClientData}) {
     );
 }
 
-function ForwardButton ({selectedSeats, browsingHistory, isButtonDisabled, setIsButtonDisabled}) {
+function ForwardButton ({selectedSeats, browsingHistory, setIsPostRequisitionSent}) {
     function isClientDataValid({nome,cpf}) {
         return nome.length && cpf.length === 11 ;
     };
@@ -125,7 +123,7 @@ function ForwardButton ({selectedSeats, browsingHistory, isButtonDisabled, setIs
     function checkDataValidation() {
         if (selectedSeats.clients.length) {
             if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
-                setIsButtonDisabled(true);
+                setIsPostRequisitionSent(true);
                 const postPromise = adjustSelectedSeatsDataAndSendToServer(selectedSeats)
                 postPromise
                     .then(() => { browsingHistory.push("/sucesso") })
@@ -136,7 +134,7 @@ function ForwardButton ({selectedSeats, browsingHistory, isButtonDisabled, setIs
     }
 
     return (
-        <button className="forward" onClick = {checkDataValidation} disabled={ isButtonDisabled } >
+        <button className="forward" onClick = {checkDataValidation} >
             Reservar assento(s)
         </button>
     );
