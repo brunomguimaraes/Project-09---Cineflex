@@ -38,7 +38,6 @@
     margin-bottom: 6px;
 }
 
-
 .seats-screen .seat {
     height: 26px;
     width: 26px;
@@ -49,7 +48,6 @@
     align-items: center;
     font-size: 11px ;
 }
-
 
 .seats-screen .seat.selected {
     background-color: #8DD7CF;

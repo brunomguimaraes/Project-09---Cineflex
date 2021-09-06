@@ -1,31 +1,31 @@
-import "./SeatsSelection.css"
-import { useParams, useHistory} from "react-router-dom"
-import Loading from "../Loading/Loading.js"
-import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer, displayError } from "../../serverFunctions.js"
-import { useEffect, useState } from "react"
+import "./SeatsSelection.css";
+import { useParams, useHistory} from "react-router-dom";
+import Loading from "../Loading/Loading.js";
+import {getSeatsForSession, adjustSelectedSeatsDataAndSendToServer, displayError } from "../../serverFunctions.js";
+import { useEffect, useState } from "react";
 
-export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,selectAvailableSeat, changeClientData}) {
+export default function SeatsSelection({selectedSession, setSelectedSession,selectedSeats,checkSeatAvailability, changeClientData}) {
     const browsingHistory = useHistory();
     const sessionId = useParams().sessionId;
     const [isPostRequisitionSent, setIsPostRequisitionSent] = useState(false);
     useEffect(() => {
         getSeatsForSession(sessionId)
             .then( resp => setSelectedSession(resp.data))
-            .catch( () => { displayError(browsingHistory) } )
-
+            .catch( () => { displayError(browsingHistory) } );
         }
     ,[]);
+
+    const seatExamples = [
+        {description: "Selecionado", seatClass:"selected"},
+        {description: "Disponível", seatClass:"available"},
+        {description: "Indisponível", seatClass:"unavailable"}
+    ];
 
     if(!selectedSession.seats || isPostRequisitionSent) {
         return (
             <Loading />
         );
     };
-    const examples = [
-        {description: "Selecionado", seatClass:"selected"},
-        {description: "Disponível", seatClass:"available"},
-        {description: "Indisponível", seatClass:"unavailable"}
-    ];
 
     return (
         <section className = "seats-screen">
@@ -38,11 +38,11 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
                         id = {id} 
                         isAvailable = {isAvailable}
                         selectedSeats = {selectedSeats}
-                        selectAvailableSeat = {selectAvailableSeat}
+                        checkSeatAvailability = {checkSeatAvailability}
                     /> )}
             </div>
             <div className="seats-explanation">
-                {examples.map( ({description,seatClass},index) => 
+                {seatExamples.map( ({description,seatClass},index) => 
                     <SeatExplanation 
                         key = {index}
                         description = {description}
@@ -64,9 +64,9 @@ export default function SeatsSelection({selectedSession, setSelectedSession,sele
             />
         </section>
     );
-}
+};
 
-function Seat ({name, id, isAvailable, selectedSeats, selectAvailableSeat}) {
+function Seat ({name, id, isAvailable, selectedSeats, checkSeatAvailability}) {
     let seatClass;
     if (selectedSeats.ids.includes(id)) {
         seatClass = "selected";
@@ -74,13 +74,13 @@ function Seat ({name, id, isAvailable, selectedSeats, selectAvailableSeat}) {
         seatClass = "available";
     } else {
         seatClass = "unavailable";
-    }
+    };
     return (
-        <button onClick = {() => selectAvailableSeat({name, id, seatClass})}>
+        <button onClick = {() => checkSeatAvailability({name, id, seatClass})}>
             <div className={`seat ${seatClass}`}>{name}</div>
         </button>
     );
-}
+};
 
 function SeatExplanation ({description,seatClass}) {
     return (
@@ -89,7 +89,7 @@ function SeatExplanation ({description,seatClass}) {
             {description ? <span>{description}</span> : ""}
         </div>
     );
-}
+};
 
 function ClientsData({clientData,changeClientData}) {
     return (
@@ -124,14 +124,13 @@ function ForwardButton ({selectedSeats, browsingHistory, setIsPostRequisitionSen
         if (selectedSeats.clients.length) {
             if (selectedSeats.clients.every( ({nome,cpf}) => isClientDataValid({nome,cpf}) )) {
                 setIsPostRequisitionSent(true);
-                const postPromise = adjustSelectedSeatsDataAndSendToServer(selectedSeats)
+                const postPromise = adjustSelectedSeatsDataAndSendToServer(selectedSeats);
                 postPromise
                     .then(() => { browsingHistory.push("/sucesso") })
-                    .catch( () => { displayError(browsingHistory) } )
+                    .catch( () => { displayError(browsingHistory) } );
             } else {alert("Por favor complete as informações dos compradores de forma correta")};
         }else {alert("Por favor selecione ao menos um assento")};
-
-    }
+    };
 
     return (
         <button className="forward" onClick = {checkDataValidation} >

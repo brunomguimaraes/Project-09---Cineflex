@@ -1,14 +1,14 @@
-import "./SuccessfulPurchase.css"
-import {useHistory} from "react-router-dom"
+import "./SuccessfulPurchase.css";
+import {useHistory} from "react-router-dom";
 
 export default function SuccessfulPurchase({ selectedMovie, selectedSession, selectedSeats,resetPurchaseData, setEnableBottomBarAndBackButton }) {
     window.scrollTo(0, 0);
     setEnableBottomBarAndBackButton(false);
-    const browsingHistory = useHistory()
+    const browsingHistory = useHistory();
     function returnHomeScreen () {
         resetPurchaseData({movie:true, session:true, seats:true});
-        browsingHistory.push("/")
-    }
+        browsingHistory.push("/");
+    };
 
     return (
         <section className="successful-purchase">

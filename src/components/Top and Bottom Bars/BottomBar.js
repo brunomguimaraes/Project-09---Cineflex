@@ -1,7 +1,7 @@
 import "./BottomBar.css";
 
 export default function BottomBar({ enabled, movie:{title, posterURL}, session:{name:movieSession, day:{weekday}} }) {
-    if (!enabled) {
+    if (!enabled || !title) {
         return ""
     };
     return (

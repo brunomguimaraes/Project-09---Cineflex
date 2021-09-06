@@ -1,11 +1,11 @@
-import "./SessionList.css"
-import {Link, useParams, useHistory} from "react-router-dom"
-import Loading from "../Loading/Loading.js"
-import {getMovieById, displayError} from "../../serverFunctions.js"
-import { useEffect } from "react"
+import "./SessionList.css";
+import {Link, useParams, useHistory} from "react-router-dom";
+import Loading from "../Loading/Loading.js";
+import {getMovieById, displayError} from "../../serverFunctions.js";
+import { useEffect } from "react";
 
 export default function SessionList({selectedMovie,setSelectedMovie,setEnableBottomBarAndBackButton}) {
-    const movieId = useParams().movieId
+    const movieId = useParams().movieId;
     const browsingHistory = useHistory();
     setEnableBottomBarAndBackButton(true);
     useEffect(() => {
@@ -19,8 +19,7 @@ export default function SessionList({selectedMovie,setSelectedMovie,setEnableBot
         return (
             <Loading />
         );
-    }
-
+    };
 
     return (
         <section className = "sessions-screen">
